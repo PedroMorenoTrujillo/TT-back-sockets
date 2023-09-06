@@ -1,36 +1,42 @@
 import {
   WebSocketGateway,
-  SubscribeMessage,
   WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  SubscribeMessage,
 } from '@nestjs/websockets';
 import { SocketService } from './socket.service';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer() sever: Server;
+  @WebSocketServer() server: Server;
 
   constructor(private readonly socketService: SocketService) {}
 
   async handleConnection() {
     const newValue = await this.socketService.getExchange();
-    this.sever.emit('exchange', newValue);
+    this.server.emit('exchange', newValue);
+    this.handleAccounts();
     setInterval(async () => {
-      this.sever.emit(
+      this.server.emit(
         'exchange',
         await this.socketService.updateAndReturnExchange(),
       );
     }, 10000);
   }
   handleDisconnect() {
-    this.sever.disconnectSockets();
+    this.server.disconnectSockets();
   }
 
-  @SubscribeMessage('exchange')
-  exchange() {
-    console.log('exchange function');
-    this.sever.emit('exchange', 4000);
+  async handleAccounts() {
+    const accounts = await this.socketService.getAllAccounts();
+    this.server.emit('account', accounts);
+  }
+
+  @SubscribeMessage('accountId')
+  async handleGetAccountById(client: Socket, id: string) {
+    const account = await this.socketService.findOneAccount(id);
+    this.server.emit('accountId', account);
   }
 }

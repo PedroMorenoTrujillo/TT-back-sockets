@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { AccountService } from 'src/account/account.service';
 import { ExchangeService } from 'src/exchange/exchange.service';
 
 @Injectable()
 export class SocketService {
-  constructor(private readonly exchangeService: ExchangeService) {}
+  constructor(
+    private readonly exchangeService: ExchangeService,
+    private readonly accountService: AccountService,
+  ) {}
 
   async getExchange() {
     return await this.exchangeService.findAll();
@@ -18,5 +22,13 @@ export class SocketService {
     } catch {
       console.log('update exchange error');
     }
+  }
+
+  async getAllAccounts() {
+    return await this.accountService.findAll();
+  }
+
+  async findOneAccount(id: string) {
+    return await this.accountService.findOne(id);
   }
 }
