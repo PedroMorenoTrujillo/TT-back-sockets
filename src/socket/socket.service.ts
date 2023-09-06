@@ -14,6 +14,7 @@ export class SocketService {
       const exchange = await this.getExchange();
       exchange.exchange = Math.random() * (12000 - 5000) + 5000;
       await this.exchangeService.update(exchange._id, exchange);
+      return this.getExchange();
     } catch {
       console.log('update exchange error');
     }

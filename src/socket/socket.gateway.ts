@@ -14,11 +14,14 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(private readonly socketService: SocketService) {}
 
-  handleConnection() {
+  async handleConnection() {
+    const newValue = await this.socketService.getExchange();
+    this.sever.emit('exchange', newValue);
     setInterval(async () => {
-      await this.socketService.updateAndReturnExchange();
-      const newValue = await this.socketService.getExchange();
-      this.sever.emit('exchange', newValue);
+      this.sever.emit(
+        'exchange',
+        await this.socketService.updateAndReturnExchange(),
+      );
     }, 10000);
   }
   handleDisconnect() {
