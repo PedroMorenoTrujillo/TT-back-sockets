@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { AccountDetailSchema } from './account-details.schema';
+import { IAccountDetail } from '../dto/accoun-detail.dto';
 
 export type AccountDocument = Account & Document;
 
@@ -7,18 +9,12 @@ export type AccountDocument = Account & Document;
 export class Account {
   @Prop({ required: true })
   accountName: string;
-  @Prop({ required: true })
-  category?: string;
-  @Prop({ required: true })
-  tag?: string;
-  @Prop({ required: true })
-  balance: number;
-  @Prop({ required: true })
-  availableBalance: number;
-  @Prop({ unique: true, required: true })
-  orderCode: string;
-  @Prop({ unique: true, required: true })
-  orderId: string;
+  @Prop()
+  category: string;
+  @Prop()
+  tag: string;
+  @Prop({ type: [AccountDetailSchema], default: [] as IAccountDetail[] })
+  details: IAccountDetail[];
 }
 
 export const AccountSchema = SchemaFactory.createForClass(Account);
