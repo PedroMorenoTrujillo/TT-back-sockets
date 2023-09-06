@@ -14,12 +14,10 @@ export class AccountService {
 
   async create(createAccountDto: CreateAccountDto) {
     return await this.account.create(createAccountDto);
-    //return 'This action adds a new account';
   }
 
   async findAll() {
     return await this.account.find();
-    //return `This action returns all account`;
   }
 
   async findOne(id: string) {

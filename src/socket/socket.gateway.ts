@@ -15,8 +15,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private readonly socketService: SocketService) {}
 
   async handleConnection() {
-    const newValue = await this.socketService.getExchange();
-    this.server.emit('exchange', newValue);
+    this.server.emit('exchange', await this.socketService.getExchange());
     this.handleAccounts();
     setInterval(async () => {
       this.server.emit(
@@ -30,13 +29,11 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async handleAccounts() {
-    const accounts = await this.socketService.getAllAccounts();
-    this.server.emit('account', accounts);
+    this.server.emit('account', await this.socketService.getAllAccounts());
   }
 
   @SubscribeMessage('accountId')
   async handleGetAccountById(client: Socket, id: string) {
-    const account = await this.socketService.findOneAccount(id);
-    this.server.emit('accountId', account);
+    this.server.emit('accountId', await this.socketService.findOneAccount(id));
   }
 }
