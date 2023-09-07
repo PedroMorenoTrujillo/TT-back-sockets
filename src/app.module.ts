@@ -6,7 +6,7 @@ import { AccountModule } from './account/account.module';
 import { ExchangeModule } from './exchange/exchange.module';
 import { SocketModule } from './socket/socket.module';
 
-//
+// Change your own DDBB connection string here!!!!
 const ddbbMongoConecctionString: string = 'mongodb://localhost/TTback';
 @Module({
   imports: [
