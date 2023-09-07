@@ -6,9 +6,11 @@ import { AccountModule } from './account/account.module';
 import { ExchangeModule } from './exchange/exchange.module';
 import { SocketModule } from './socket/socket.module';
 
+//
+const ddbbMongoConecctionString: string = 'mongodb://localhost/TTback';
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/TTback'),
+    MongooseModule.forRoot(ddbbMongoConecctionString),
     AccountModule,
     ExchangeModule,
     SocketModule,

@@ -5,9 +5,9 @@ export type AccountDetailDocument = AccountDetail & Document;
 
 @Schema({ timestamps: true })
 export class AccountDetail {
-  @Prop({ auto: true })
+  @Prop({ auto: true, unique: true })
   orderCode: string;
-  @Prop({ auto: true })
+  @Prop({ auto: true, unique: true })
   orderId: string;
   @Prop({ required: true })
   transactionType?: string;

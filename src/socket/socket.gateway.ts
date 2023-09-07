@@ -5,6 +5,7 @@ import {
 } from '@nestjs/websockets';
 import { SocketService } from './socket.service';
 import { Server, Socket } from 'socket.io';
+import { randomMathInterval } from 'src/utils/ramdomMathInterval';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class SocketGateway {
@@ -35,5 +36,23 @@ export class SocketGateway {
   @SubscribeMessage('account')
   async handleGetAllAccounts() {
     this.server.emit('account', await this.socketService.getAllAccounts());
+  }
+
+  @SubscribeMessage('account')
+  async handleUpdateAccountDetails() {
+    const randomIntervalTime = randomMathInterval(20000, 40000);
+    const { id, data } = await this.socketService.updateAccountDetails();
+    //console.log(accountForUpdate);
+    setInterval(async () => {
+      const allAccounts = await this.socketService.upDateRandomAccountDetails(
+        id,
+        data,
+      );
+      this.server.emit('account', await this.socketService.getAllAccounts());
+      this.server.emit(
+        'accountId',
+        await this.socketService.findOneAccount(id),
+      );
+    }, randomIntervalTime);
   }
 }

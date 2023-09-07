@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { AccountService } from 'src/account/account.service';
+import { IAccount } from 'src/account/dto/create-account.dto';
+import { UpdateAccountDto } from 'src/account/dto/update-account.dto';
 import { ExchangeService } from 'src/exchange/exchange.service';
 import { randomMathInterval } from 'src/utils/ramdomMathInterval';
+import { updateMapperTool } from 'src/utils/updateMapperTool';
 
 @Injectable()
 export class SocketService {
@@ -42,6 +45,35 @@ export class SocketService {
       return await this.accountService.findOne(id);
     } catch {
       console.log('find account error');
+    }
+  }
+
+  async upDateRandomAccountDetails(
+    id: string,
+    updateAccountDto: UpdateAccountDto,
+  ) {
+    try {
+      return await this.accountService.update(id, updateAccountDto);
+    } catch {
+      console.log('Update account details error');
+    }
+  }
+
+  async updateAccountDetails(): Promise<{ id: string; data: IAccount }> {
+    try {
+      const accounts = await this.getAllAccounts();
+      const accountsIds = accounts.map((account) => account._id);
+      const idRandom = accountsIds[
+        Math.floor(Math.random() * accountsIds.length)
+      ] as string;
+
+      const accountSelected = accounts.filter(
+        (account) => (account._id = idRandom),
+      )[0];
+      const newUpdateAccount = updateMapperTool(accountSelected as IAccount);
+      return { id: idRandom, data: newUpdateAccount };
+    } catch {
+      console.log('Update account error');
     }
   }
 }

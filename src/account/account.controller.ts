@@ -34,7 +34,7 @@ export class AccountController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-    return this.accountService.update(+id, updateAccountDto);
+    return this.accountService.update(id, updateAccountDto);
   }
 
   @Delete(':id')

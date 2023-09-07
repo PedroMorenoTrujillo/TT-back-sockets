@@ -13,6 +13,10 @@ export class Account {
   category: string;
   @Prop()
   tag: string;
+  @Prop()
+  balance: number;
+  @Prop()
+  availableBalance: number;
   @Prop({ type: [AccountDetailSchema], default: [] as IAccountDetail[] })
   details: IAccountDetail[];
 }

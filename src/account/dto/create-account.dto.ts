@@ -8,3 +8,12 @@ export class CreateAccountDto {
   availableBalance: number;
   details: IAccountDetail[];
 }
+
+export interface IAccount {
+  accountName: string;
+  category?: string;
+  tag?: string;
+  balance: number;
+  availableBalance: number;
+  details: IAccountDetail[];
+}
