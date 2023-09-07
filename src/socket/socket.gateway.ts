@@ -2,7 +2,6 @@ import {
   WebSocketGateway,
   WebSocketServer,
   SubscribeMessage,
-  OnGatewayInit,
 } from '@nestjs/websockets';
 import { SocketService } from './socket.service';
 import { Server, Socket } from 'socket.io';
@@ -25,7 +24,7 @@ export class SocketGateway {
         'exchange',
         await this.socketService.updateAndReturnExchange(),
       );
-    }, 10000);
+    }, 30000);
   }
 
   @SubscribeMessage('accountId')

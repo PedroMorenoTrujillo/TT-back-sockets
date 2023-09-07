@@ -11,7 +11,11 @@ export class SocketService {
   ) {}
 
   async getExchange() {
-    return await this.exchangeService.findAll();
+    try {
+      return await this.exchangeService.findAll();
+    } catch {
+      console.log('Get exchange rate error');
+    }
   }
 
   async updateAndReturnExchange() {
@@ -26,10 +30,18 @@ export class SocketService {
   }
 
   async getAllAccounts() {
-    return await this.accountService.findAll();
+    try {
+      return await this.accountService.findAll();
+    } catch {
+      console.log('get all accounts error');
+    }
   }
 
   async findOneAccount(id: string) {
-    return await this.accountService.findOne(id);
+    try {
+      return await this.accountService.findOne(id);
+    } catch {
+      console.log('find account error');
+    }
   }
 }
