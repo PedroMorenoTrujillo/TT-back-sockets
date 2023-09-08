@@ -13,13 +13,9 @@ export class SocketGateway {
 
   constructor(private readonly socketService: SocketService) {}
 
-  @SubscribeMessage('exchangeInit')
-  async handleInitExchangeRate() {
-    this.server.emit('exchange', await this.socketService.getExchange());
-  }
-
   @SubscribeMessage('exchange')
   async handleGetExchangeRate() {
+    await this.server.emit('exchange', await this.socketService.getExchange());
     setInterval(async () => {
       this.server.emit(
         'exchange',
@@ -34,15 +30,13 @@ export class SocketGateway {
   }
 
   @SubscribeMessage('account')
-  async handleGetAllAccounts() {
-    this.server.emit('account', await this.socketService.getAllAccounts());
-  }
-
-  @SubscribeMessage('account')
   async handleUpdateAccountDetails() {
+    await this.server.emit(
+      'account',
+      await this.socketService.getAllAccounts(),
+    );
     const randomIntervalTime = randomMathInterval(20000, 40000);
     const { id, data } = await this.socketService.updateAccountDetails();
-    //console.log(accountForUpdate);
     setInterval(async () => {
       const allAccounts = await this.socketService.upDateRandomAccountDetails(
         id,
